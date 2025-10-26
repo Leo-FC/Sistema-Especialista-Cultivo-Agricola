@@ -1,50 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema Especialista Agrícola</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
     <div id="app">
-        <h1>Sistema Especialista de Diagnóstico Agrícola</h1>
+      <h1>Sistema Especialista de Diagnóstico Agrícola</h1>
 
-        <div class="controles">
-          <h2>1. Adicionar Fatos</h2>
-          <div class="controles__botoes"> 
-              <button id="btn-add-folha">Adicionar Sintoma de Folha</button>
-              <button id="btn-add-praga">Adicionar Sintoma de Praga</button>
-              <button id="btn-add-solo">Adicionar Condição de Solo/Água</button>
-              <button id="btn-add-clima">Adicionar Condição Climática</button>
-          </div>
+      <div class="controles">
+        <h2>1. Adicionar Fatos</h2>
+        <div class="controles__botoes">
+          <button id="btn-add-folha">Adicionar Sintoma de Folha</button>
+          <button id="btn-add-praga">Adicionar Sintoma de Praga</button>
+          <button id="btn-add-solo">Adicionar Condição de Solo/Água</button>
+          <button id="btn-add-clima">Adicionar Condição Climática</button>
+        </div>
       </div>
 
-        <div class="sessao">
-            <h2>2. Fatos Acumulados</h2>
-            <ul id="fatos-acumulados"></ul>
-        </div>
-        
-        <div class="sessao">
-            <h2>3. Ação</h2>
-            <button id="btn-diagnosticar">DIAGNOSTICAR</button>
-            <button id="btn-limpar">Limpar Fatos</button>
-        </div>
+      <div class="sessao">
+        <h2>2. Fatos Acumulados</h2>
+        <ul id="fatos-acumulados"></ul>
+      </div>
 
-        <div class="sessao">
-            <h2>4. Resultados</h2>
-            <div id="resultados"></div>
+      <div class="sessao">
+        <h2>3. Ação</h2>
+        <div class="sessao__botoes">
+          <button id="btn-diagnosticar">Diagnosticar</button>
+          <button id="btn-limpar">Limpar Fatos</button>
         </div>
+      </div>
+
+      <div class="sessao">
+        <h2>4. Resultados</h2>
+        <div id="resultados"></div>
+      </div>
     </div>
 
     <div id="modal-overlay" class="hidden">
-        <div id="modal-content">
-            <h3 id="modal-title">Título da Pergunta</h3>
-            <div id="modal-options">
-                </div>
-        </div>
+      <div id="modal-content">
+        <h3 id="modal-title">Título da Pergunta</h3>
+        <div id="modal-options"></div>
+      </div>
     </div>
 
     <script src="/static/app.js"></script>
-</body>
+  </body>
 </html>

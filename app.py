@@ -111,5 +111,6 @@ def diagnosticar():
 
 # --- Comando para rodar o servidor ---
 if __name__ == '__main__':
-    # Roda o app em modo de debug
+#     Roda o app em modo de debug
     app.run(debug=True, port=5000)
+
