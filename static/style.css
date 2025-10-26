@@ -65,16 +65,14 @@ h2 {
 }
 
 .controles__botoes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
 .controles__botoes button {
-  flex: 1 1 calc(50% - 12px);
-  min-width: 250px;
   box-sizing: border-box;
+  margin: 0;
 }
 
 ul#fatos-acumulados {
@@ -211,6 +209,47 @@ button:active {
 #modal-options button:hover {
   background: var(--accent);
   color: #fff;
+}
+
+.modal-input {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-actions button {
+  margin: 0;
+  text-align: center !important;
+  color: #fff !important;
+}
+
+.modal-btn-cancel {
+  background: var(--danger) !important;
+}
+
+.modal-btn-cancel:hover {
+  background: #a12323 !important;
+  transform: scale(1.03);
+}
+
+.modal-btn-confirm {
+  background: var(--primary) !important;
+}
+.modal-btn-confirm:hover {
+  background: var(--primary-dark) !important;
+  transform: scale(1.03);
 }
 
 /* -----------------------------

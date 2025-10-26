@@ -1,10 +1,6 @@
-// Espera a página carregar
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- Variável de Estado ---
     let fatosAcumulados = [];
-
-    // --- Seletores de Elementos ---
+    
     const btnFolha = document.getElementById('btn-add-folha');
     const btnPraga = document.getElementById('btn-add-praga');
     const btnSolo = document.getElementById('btn-add-solo');
@@ -14,12 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const listaFatosUI = document.getElementById('fatos-acumulados');
     const resultadosUI = document.getElementById('resultados');
 
-    // --- Seletores do Modal ---
     const modalOverlay = document.getElementById('modal-overlay');
     const modalTitle = document.getElementById('modal-title');
     const modalOptions = document.getElementById('modal-options');
-
-    // --- Funções de Ajuda ---
 
     function adicionarFato(tipo, dados, descricao) {
         fatosAcumulados.push({ tipo: tipo, dados: dados });
@@ -35,36 +28,78 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * NOVA FUNÇÃO DE MODAL (Substitui o prompt)
-     * Mostra um modal com opções e espera o clique do usuário.
      * @param {string} title - O título da pergunta.
      * @param {Object} options - Um objeto onde {chave: 'valor_exibido'}
      * @returns {Promise<string|null>} - A CHAVE da opção clicada (ex: '1') ou null.
      */
     function askQuestion(title, options) {
-        // Retorna uma Promessa que será resolvida quando o usuário clicar
         return new Promise(resolve => {
             modalTitle.textContent = title;
-            modalOptions.innerHTML = ''; // Limpa botões antigos
+            modalOptions.innerHTML = ''
 
-            // Cria um botão para cada opção
             for (const [key, value] of Object.entries(options)) {
                 const btn = document.createElement('button');
                 btn.textContent = value;
                 btn.onclick = () => {
-                    modalOverlay.classList.add('hidden'); // Esconde o modal
-                    resolve(key); // Resolve a promessa com a CHAVE (ex: '1', 'v')
+                    modalOverlay.classList.add('hidden');
+                    resolve(key);
                 };
                 modalOptions.appendChild(btn);
             }
             
-            modalOverlay.classList.remove('hidden'); // Mostra o modal
+            modalOverlay.classList.remove('hidden');
         });
     }
 
-    // --- Funções de Menu (Agora são 'async' para usar 'await') ---
+    /**
+     * @param {string} title - O título da pergunta.
+     * @param {string} placeholder - Placeholder para o input.
+     * @param {string} inputType - O tipo do input (ex: 'number', 'text').
+     * @returns {Promise<string|null>} - O valor digitado ou null se cancelado.
+     */
+    function askForInput(title, placeholder = '', inputType = 'text') {
+        return new Promise(resolve => {
+            modalTitle.textContent = title;
+            modalOptions.innerHTML = '';
 
-    // async/await permite que o código "espere" o usuário clicar no modal
+            const input = document.createElement('input');
+            input.type = inputType;
+            input.placeholder = placeholder;
+            input.className = 'modal-input';
+            if (inputType === 'number') {
+                input.step = '0.1';
+            }
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'modal-actions';
+
+            const btnConfirm = document.createElement('button');
+            btnConfirm.textContent = 'Confirmar';
+            btnConfirm.className = 'modal-btn-confirm';
+            btnConfirm.onclick = () => {
+                modalOverlay.classList.add('hidden');
+                resolve(input.value); 
+            };
+
+            const btnCancel = document.createElement('button');
+            btnCancel.textContent = 'Cancelar';
+            btnCancel.className = 'modal-btn-cancel';
+            btnCancel.onclick = () => {
+                modalOverlay.classList.add('hidden');
+                resolve(null); 
+            };
+
+            actionsDiv.appendChild(btnCancel);
+            actionsDiv.appendChild(btnConfirm);
+            modalOptions.appendChild(input);
+            modalOptions.appendChild(actionsDiv);
+
+            modalOverlay.classList.remove('hidden');
+
+            input.focus();
+        });
+    }
+
     async function menuFolha() {
         const local = await askQuestion("Onde é o sintoma?", {
             '1': 'Folhas Velhas (na base)',
@@ -113,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        if (Object.keys(dados).length > 0) { // Só adiciona se um fato foi criado
+        if (Object.keys(dados).length > 0) {
             adicionarFato('Sintoma', dados, descricao);
         }
     }
@@ -134,10 +169,14 @@ document.addEventListener('DOMContentLoaded', () => {
             adicionarFato('Condicao', { solo_umido: 'encharcado' }, 'Solo: Encharcado');
             adicionarFato('Sintoma', { planta_folhas_baixas: 'amareladas' }, 'Planta: Folhas baixas amareladas');
         } else if (opcao === '3') {
-            // Para inserção manual, o prompt ainda é a ferramenta mais rápida
-            const ph = parseFloat(prompt("Digite o valor do pH (ex: 5.5):"));
-            if (ph) {
-                adicionarFato('Condicao', { ph_solo: ph }, `Solo: pH ${ph}`);
+            const phValue = await askForInput("Digite o valor do pH", "ex: 5.5", "number");
+            if (phValue) {
+                const ph = parseFloat(phValue);
+                if (!isNaN(ph)) {
+                    adicionarFato('Condicao', { ph_solo: ph }, `Solo: pH ${ph}`);
+                } else {
+                    alert("Valor de pH inválido. Por favor, insira um número.");
+                }
             }
         }
     }
@@ -211,8 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // --- Função Principal: Chamar a API ---
-    
     async function executarDiagnostico() {
         if (fatosAcumulados.length === 0) {
             alert("Por favor, adicione pelo menos um fato antes de diagnosticar.");
@@ -262,7 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Conectar Botões às Funções ---
     btnFolha.addEventListener('click', menuFolha);
     btnSolo.addEventListener('click', menuSolo);
     btnPraga.addEventListener('click', menuPraga);
